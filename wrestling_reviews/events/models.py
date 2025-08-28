@@ -7,6 +7,7 @@ class Event(models.Model):
     promotion = models.CharField(max_length=100, blank=True, default="")
     description = models.TextField(blank=True, default="")
     is_ppv = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Meta:
         ordering = ["-date", "-created_at"]
