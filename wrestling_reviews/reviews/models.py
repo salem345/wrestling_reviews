@@ -9,7 +9,7 @@ class Review(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="reviews")
     wrestlers = models.ManyToManyField(Wrestler, related_name="reviews")
     review_content = models.TextField()
-    rating = models.IntegerField()
+    rating = models.FloatField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 

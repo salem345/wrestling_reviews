@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-2%cu3dx(p7k4pfwp)1psj(=(7p$q3!%f8h&yd^t(zu664-9$-%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['8000','localhost', '127.0.0.1', '8080']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'users',
     'reviews',
     'events',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,11 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
