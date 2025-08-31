@@ -1,3 +1,4 @@
+from django.forms import models
 from rest_framework import serializers
 from .models import Event
 from datetime import date
@@ -33,3 +34,14 @@ class EventSerializer(serializers.ModelSerializer):
         if value.year < 1900:
             raise serializers.ValidationError("تاريخ الحدث غير منطقي (قبل 1900).")
         return value
+
+    def validate_updated_at(self, value):
+        # مثال: تأكد أن تاريخ التحديث ليس في المستقبل
+        if value > date.today():
+            raise serializers.ValidationError("تاريخ التحديث لا يمكن أن يكون في المستقبل.")
+        return value
+    
+class Event(models.Model):
+    # الحقول الأخرى
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

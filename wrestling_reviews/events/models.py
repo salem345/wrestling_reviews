@@ -10,7 +10,7 @@ class Event(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Meta:
-        ordering = ["-date", "-created_at"]
+        ordering = ["-date", "-created_at","updated_at"]
 
 def __str__(self):
         return self.name
