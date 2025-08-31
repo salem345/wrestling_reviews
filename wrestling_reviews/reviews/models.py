@@ -6,6 +6,7 @@ from wrestlers.models import Wrestler
 
 class Review(models.Model):
     match_title = models.CharField(max_length=200)
+    event = models.ForeignKey('events.Event', on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="reviews")
     wrestlers = models.ManyToManyField(Wrestler, related_name="reviews")
     review_content = models.TextField()

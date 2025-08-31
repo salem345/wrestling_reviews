@@ -8,9 +8,10 @@ class Event(models.Model):
     description = models.TextField(blank=True, default="")
     is_ppv = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-class Meta:
-        ordering = ["-date", "-created_at","updated_at"]
+    class Meta:
+        ordering = ["date", "-created_at", "-updated_at"]
 
 def __str__(self):
         return self.name

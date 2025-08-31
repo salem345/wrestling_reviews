@@ -1,7 +1,5 @@
-from django.forms import models
 from rest_framework import serializers
 from .models import Event
-from datetime import date
 
 class EventSerializer(serializers.ModelSerializer):
     """
@@ -40,8 +38,3 @@ class EventSerializer(serializers.ModelSerializer):
         if value > date.today():
             raise serializers.ValidationError("تاريخ التحديث لا يمكن أن يكون في المستقبل.")
         return value
-    
-class Event(models.Model):
-    # الحقول الأخرى
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
