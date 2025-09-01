@@ -3,6 +3,13 @@ from rest_framework import generics, permissions
 from .models import Wrestler
 from .serializers import WrestlerSerializer
 from rest_framework import filters
+from rest_framework import viewsets
+from .models import Wrestler
+from .serializers import WrestlerSerializer
+
+class WrestlerViewSet(viewsets.ModelViewSet):
+    queryset = Wrestler.objects.all()
+    serializer_class = WrestlerSerializer
 
 class WrestlerListCreateView(generics.ListCreateAPIView):
     queryset = Wrestler.objects.all()

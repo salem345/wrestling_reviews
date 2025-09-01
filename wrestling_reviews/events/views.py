@@ -3,6 +3,9 @@ from rest_framework import viewsets, permissions
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Event
 from .serializers import EventSerializer
+from rest_framework import viewsets
+from .models import Wrestler
+from .serializers import WrestlerSerializer
 
 class EventViewSet(viewsets.ModelViewSet):
     """
@@ -34,4 +37,8 @@ class EventViewSet(viewsets.ModelViewSet):
     ordering_fields = ["date", "created_at", "updated_at", "name"]
     ordering = ["-date"]
 
+
+class WrestlerViewSet(viewsets.ModelViewSet):
+    queryset = Wrestler.objects.all()
+    serializer_class = WrestlerSerializer
 # Create your views here.
