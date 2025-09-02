@@ -4,7 +4,7 @@ from .models import Review
 from .serializers import ReviewSerializer
 from rest_framework import viewsets
 from .models import Wrestler
-from .serializers import WrestlerSerializer
+from wrestlers.serializers import WrestlerSerializer
 
 class WrestlerViewSet(viewsets.ModelViewSet):
     queryset = Wrestler.objects.all()

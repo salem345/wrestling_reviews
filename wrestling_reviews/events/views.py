@@ -4,8 +4,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Event
 from .serializers import EventSerializer
 from rest_framework import viewsets
-from .models import Wrestler
-from .serializers import WrestlerSerializer
+from wrestlers.models import Wrestler
+from wrestlers.serializers import WrestlerSerializer
 
 class EventViewSet(viewsets.ModelViewSet):
     """
