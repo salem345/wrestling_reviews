@@ -5,3 +5,4 @@ class WrestlerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wrestler
         fields = '__all__'
+        read_only_fields = ['id']
