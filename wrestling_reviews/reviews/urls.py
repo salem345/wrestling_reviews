@@ -1,11 +1,12 @@
-from rest_framework.routers import DefaultRouter
-from .views import ReviewViewSet, WrestlerViewSet
 from django.urls import path, include
-
+from rest_framework.routers import DefaultRouter
+from reviews.views import ReviewViewSet, WrestlerViewSet
+from django.contrib import admin
 router = DefaultRouter()
-router.register(r'wrestlers', WrestlerViewSet)
 router.register(r'reviews', ReviewViewSet, basename='review')
+router.register(r'wrestlers', WrestlerViewSet, basename='wrestler')
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
+    path('admin/', admin.site.urls),
 ]
