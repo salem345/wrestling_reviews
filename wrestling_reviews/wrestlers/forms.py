@@ -2,6 +2,8 @@ from django import forms
 from .models import Wrestler
 
 
+
+
 class WrestlerForm(forms.ModelForm):
     class Meta:
         model = Wrestler
