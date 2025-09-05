@@ -33,6 +33,8 @@ class EventForm(forms.ModelForm):
             })
         }
 
+    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Make required fields
