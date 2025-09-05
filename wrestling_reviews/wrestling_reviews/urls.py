@@ -20,6 +20,7 @@ from rest_framework.routers import DefaultRouter
 from reviews.views import ReviewViewSet, WrestlerViewSet
 from events.views import EventViewSet
 from users.views import UserViewSet
+from django.http import HttpResponse
 
 router = DefaultRouter()
 router.register(r'wrestlers', WrestlerViewSet, basename='wrestler')
@@ -27,7 +28,18 @@ router.register(r'reviews', ReviewViewSet, basename='review')
 router.register(r'events', EventViewSet, basename='event')
 router.register(r'users', UserViewSet, basename='user')
 
+
+
+def home(request):
+    return HttpResponse("Welcome to Wrestling Reviews API")
+
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
+     path("admin/", admin.site.urls),
+     path("api/", include("wrestling_reviews.api_urls")),
+    path("api/wrestlers/", include("wrestlers.urls")),
+    path("api/events/", include("events.urls")),
+    path("api/reviews/", include("reviews.urls")),
+    path("api/users/", include("users.urls")),
+     path('', home),
 ]
