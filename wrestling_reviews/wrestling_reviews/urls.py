@@ -20,7 +20,7 @@ from rest_framework.routers import DefaultRouter
 from reviews.views import ReviewViewSet, WrestlerViewSet
 from events.views import EventViewSet
 from users.views import UserViewSet
-from django.http import HttpResponse
+from . import views
 
 router = DefaultRouter()
 router.register(r'wrestlers', WrestlerViewSet, basename='wrestler')
@@ -30,16 +30,33 @@ router.register(r'users', UserViewSet, basename='user')
 
 
 
-def home(request):
-    return HttpResponse("Welcome to Wrestling Reviews API")
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    
+    # Web interface URLs
+    path('', views.home, name='home'),
+    path('reviews/', views.reviews_list, name='reviews_list'),
+    path('reviews/<int:pk>/', views.review_detail, name='review_detail'),
+    path('reviews/add/', views.add_review, name='add_review'),
+    path('reviews/<int:pk>/edit/', views.edit_review, name='edit_review'),
+    path('reviews/<int:pk>/delete/', views.delete_review, name='delete_review'),
+    
+    path('wrestlers/', views.wrestlers_list, name='wrestlers_list'),
+    path('wrestlers/<int:pk>/', views.wrestler_detail, name='wrestler_detail'),
+    path('wrestlers/add/', views.add_wrestler, name='add_wrestler'),
+    path('wrestlers/<int:pk>/edit/', views.edit_wrestler, name='edit_wrestler'),
+    
+    path('events/', views.events_list, name='events_list'),
+    path('events/<int:pk>/', views.event_detail, name='event_detail'),
+    path('events/add/', views.add_event, name='add_event'),
+    path('events/<int:pk>/edit/', views.edit_event, name='edit_event'),
+    
+    # API URLs
     path("api/", include("wrestling_reviews.api_urls")),
     path("api/wrestlers/", include("wrestlers.urls")),
     path("api/events/", include("events.urls")),
     path("api/reviews/", include("reviews.urls")),
     path("api/users/", include("users.urls")),
-     path('', home),
 ]

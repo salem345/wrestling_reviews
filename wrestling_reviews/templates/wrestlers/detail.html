@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ wrestler.name }} - Wrestling Reviews{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body text-center">
+                <h2 class="card-title">{{ wrestler.name }}</h2>
+                <div class="mb-3">
+                    <i class="fas fa-flag fa-2x text-primary"></i>
+                </div>
+                <p class="mb-2"><strong>Country:</strong> {{ wrestler.country }}</p>
+                {% if wrestler.birth_date %}
+                <p class="mb-2"><strong>Born:</strong> {{ wrestler.birth_date|date:"F d, Y" }}</p>
+                {% endif %}
+                {% if wrestler.debut_date %}
+                <p class="mb-2"><strong>Debut:</strong> {{ wrestler.debut_date|date:"F d, Y" }}</p>
+                {% endif %}
+                <p class="mb-3"><strong>Debut Year:</strong> {{ wrestler.debut_year }}</p>
+                <div class="mb-3">
+                    <span class="badge bg-primary fs-6">{{ reviews.count }} Reviews</span>
+                </div>
+                <a href="{% url 'edit_wrestler' wrestler.id %}" class="btn btn-primary">
+                    <i class="fas fa-edit me-1"></i>Edit Wrestler
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <h3 class="mb-4">Reviews featuring {{ wrestler.name }}</h3>
+        
+        {% for review in reviews %}
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title">{{ review.match_title }}</h5>
+                    <span class="badge bg-warning text-dark">
+                        <i class="fas fa-star"></i> {{ review.rating }}/5
+                    </span>
+                </div>
+                
+                <div class="mb-2">
+                    <small class="text-muted">
+                        <i class="fas fa-calendar me-1"></i>{{ review.event.name }}
+                        <span class="ms-2">{{ review.created_at|date:"M d, Y" }}</span>
+                    </small>
+                </div>
+
+                <div class="mb-3">
+                    {% for wrestler_in_review in review.wrestlers.all %}
+                        <span class="badge bg-secondary me-1">{{ wrestler_in_review.name }}</span>
+                    {% endfor %}
+                </div>
+
+                <p class="card-text">{{ review.review_content|truncatewords:30 }}</p>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                        <i class="fas fa-user me-1"></i>{{ review.user.username }}
+                    </small>
+                    <a href="{% url 'review_detail' review.id %}" class="btn btn-primary btn-sm">Read Full Review</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-5">
+            <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+            <h4>No reviews yet</h4>
+            <p class="text-muted">Be the first to review a match featuring {{ wrestler.name }}!</p>
+            <a href="{% url 'add_review' %}" class="btn btn-primary">Add Review</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

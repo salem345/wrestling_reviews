@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ review.match_title }} - Wrestling Reviews{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h1 class="card-title">{{ review.match_title }}</h1>
+                    <div class="text-end">
+                        <div class="rating-display mb-2">
+                            <span class="badge bg-warning text-dark fs-5">
+                                <i class="fas fa-star"></i> {{ review.rating }}/5
+                            </span>
+                        </div>
+                        <div>
+                            <a href="{% url 'edit_review' review.id %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <h6 class="text-muted mb-2">Event</h6>
+                    <p><i class="fas fa-calendar me-2"></i>{{ review.event.name }}</p>
+                    <small class="text-muted">{{ review.event.date|date:"F d, Y" }} - {{ review.event.location }}</small>
+                </div>
+
+                <div class="mb-3">
+                    <h6 class="text-muted mb-2">Wrestlers</h6>
+                    {% for wrestler in review.wrestlers.all %}
+                        <span class="badge bg-secondary me-2 mb-1">{{ wrestler.name }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="text-muted mb-2">Review</h6>
+                    <div class="review-content">
+                        {{ review.review_content|linebreaks }}
+                    </div>
+                </div>
+
+                <div class="border-top pt-3">
+                    <small class="text-muted">
+                        <i class="fas fa-user me-1"></i>Reviewed by {{ review.user.username }}
+                        <span class="ms-3">
+                            <i class="fas fa-clock me-1"></i>{{ review.created_at|date:"F d, Y \a\t g:i A" }}
+                        </span>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle me-2"></i>Event Details</h5>
+            </div>
+            <div class="card-body">
+                <h6>{{ review.event.name }}</h6>
+                <p class="mb-2"><strong>Date:</strong> {{ review.event.date|date:"F d, Y" }}</p>
+                <p class="mb-2"><strong>Location:</strong> {{ review.event.location }}</p>
+                {% if review.event.promotion %}
+                <p class="mb-2"><strong>Promotion:</strong> {{ review.event.promotion }}</p>
+                {% endif %}
+                <p class="mb-0">
+                    <span class="badge {% if review.event.is_ppv %}bg-success{% else %}bg-secondary{% endif %}">
+                        {% if review.event.is_ppv %}Pay-Per-View{% else %}Regular Event{% endif %}
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-users me-2"></i>Wrestler Details</h5>
+            </div>
+            <div class="card-body">
+                {% for wrestler in review.wrestlers.all %}
+                <div class="mb-3 {% if not forloop.last %}border-bottom pb-3{% endif %}">
+                    <h6>{{ wrestler.name }}</h6>
+                    <p class="mb-1"><strong>Country:</strong> {{ wrestler.country }}</p>
+                    {% if wrestler.birth_date %}
+                    <p class="mb-1"><strong>Born:</strong> {{ wrestler.birth_date|date:"F d, Y" }}</p>
+                    {% endif %}
+                    {% if wrestler.debut_date %}
+                    <p class="mb-0"><strong>Debut:</strong> {{ wrestler.debut_date|date:"F d, Y" }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Review</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this review? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" action="{% url 'delete_review' review.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

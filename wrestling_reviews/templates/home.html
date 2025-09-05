@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Wrestling Reviews{% endblock %}
+
+{% block content %}
+<div class="hero-section bg-primary text-white py-5 mb-5 rounded">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-3">
+            <i class="fas fa-fist-raised me-3"></i>Wrestling Reviews
+        </h1>
+        <p class="lead mb-4">Share your thoughts on the greatest wrestling matches and events</p>
+        <a href="{% url 'add_review' %}" class="btn btn-light btn-lg">
+            <i class="fas fa-plus me-2"></i>Write Your First Review
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <h2 class="mb-4">Latest Reviews</h2>
+        <div class="row">
+            {% for review in latest_reviews %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ review.match_title }}</h5>
+                        <div class="mb-2">
+                            <span class="badge bg-warning text-dark">
+                                <i class="fas fa-star"></i> {{ review.rating }}/5
+                            </span>
+                            <small class="text-muted ms-2">{{ review.created_at|date:"M d, Y" }}</small>
+                        </div>
+                        <p class="card-text">{{ review.review_content|truncatewords:20 }}</p>
+                        <div class="mb-2">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>{{ review.event.name }}
+                            </small>
+                        </div>
+                        <div class="mb-3">
+                            {% for wrestler in review.wrestlers.all %}
+                                <span class="badge bg-secondary me-1">{{ wrestler.name }}</span>
+                            {% endfor %}
+                        </div>
+                        <a href="{% url 'review_detail' review.id %}" class="btn btn-primary btn-sm">Read More</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                    <h4>No reviews yet</h4>
+                    <p class="text-muted">Be the first to share your wrestling match review!</p>
+                    <a href="{% url 'add_review' %}" class="btn btn-primary">Add First Review</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-bar me-2"></i>Quick Stats</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <h3 class="text-primary">{{ total_reviews }}</h3>
+                        <small>Reviews</small>
+                    </div>
+                    <div class="col-4">
+                        <h3 class="text-success">{{ total_wrestlers }}</h3>
+                        <small>Wrestlers</small>
+                    </div>
+                    <div class="col-4">
+                        <h3 class="text-warning">{{ total_events }}</h3>
+                        <small>Events</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-users me-2"></i>Top Wrestlers</h5>
+            </div>
+            <div class="card-body">
+                {% for wrestler in top_wrestlers %}
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <strong>{{ wrestler.name }}</strong>
+                        <br>
+                        <small class="text-muted">{{ wrestler.country }}</small>
+                    </div>
+                    <span class="badge bg-primary">{{ wrestler.reviews.count }} reviews</span>
+                </div>
+                {% empty %}
+                <p class="text-muted">No wrestlers yet</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

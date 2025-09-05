@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Edit{% else %}Add{% endif %} Review - Wrestling Reviews{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h2 class="mb-0">
+                    <i class="fas fa-{% if form.instance.pk %}edit{% else %}plus{% endif %} me-2"></i>
+                    {% if form.instance.pk %}Edit Review{% else %}Add New Review{% endif %}
+                </h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.match_title.id_for_label }}" class="form-label">
+                            <i class="fas fa-trophy me-1"></i>Match Title *
+                        </label>
+                        {{ form.match_title }}
+                        {% if form.match_title.errors %}
+                            <div class="text-danger small">{{ form.match_title.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.event.id_for_label }}" class="form-label">
+                            <i class="fas fa-calendar me-1"></i>Event *
+                        </label>
+                        {{ form.event }}
+                        {% if form.event.errors %}
+                            <div class="text-danger small">{{ form.event.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.wrestlers.id_for_label }}" class="form-label">
+                            <i class="fas fa-users me-1"></i>Wrestlers *
+                        </label>
+                        {{ form.wrestlers }}
+                        <div class="form-text">Hold Ctrl (Cmd on Mac) to select multiple wrestlers</div>
+                        {% if form.wrestlers.errors %}
+                            <div class="text-danger small">{{ form.wrestlers.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.rating.id_for_label }}" class="form-label">
+                            <i class="fas fa-star me-1"></i>Rating *
+                        </label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.rating }}
+                            </div>
+                            <div class="col-md-6">
+                                <div class="rating-display mt-2">
+                                    <span id="rating-stars"></span>
+                                    <span id="rating-text" class="ms-2 text-muted"></span>
+                                </div>
+                            </div>
+                        </div>
+                        {% if form.rating.errors %}
+                            <div class="text-danger small">{{ form.rating.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="{{ form.review_content.id_for_label }}" class="form-label">
+                            <i class="fas fa-comment me-1"></i>Review Content *
+                        </label>
+                        {{ form.review_content }}
+                        <div class="form-text">Share your detailed thoughts about the match</div>
+                        {% if form.review_content.errors %}
+                            <div class="text-danger small">{{ form.review_content.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'reviews_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>
+                            {% if form.instance.pk %}Update Review{% else %}Save Review{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ratingInput = document.getElementById('id_rating');
+    const ratingStars = document.getElementById('rating-stars');
+    const ratingText = document.getElementById('rating-text');
+    
+    function updateRatingDisplay() {
+        const rating = parseFloat(ratingInput.value) || 0;
+        const fullStars = Math.floor(rating);
+        const hasHalfStar = rating % 1 >= 0.5;
+        
+        let starsHtml = '';
+        for (let i = 0; i < 5; i++) {
+            if (i < fullStars) {
+                starsHtml += '<i class="fas fa-star text-warning"></i>';
+            } else if (i === fullStars && hasHalfStar) {
+                starsHtml += '<i class="fas fa-star-half-alt text-warning"></i>';
+            } else {
+                starsHtml += '<i class="far fa-star text-muted"></i>';
+            }
+        }
+        
+        ratingStars.innerHTML = starsHtml;
+        ratingText.textContent = rating > 0 ? `${rating}/5` : 'No rating';
+    }
+    
+    ratingInput.addEventListener('input', updateRatingDisplay);
+    updateRatingDisplay(); // Initial display
+});
+</script>
+{% endblock %}
