@@ -3,12 +3,12 @@ from rest_framework.routers import DefaultRouter
 from reviews.views import ReviewViewSet, WrestlerViewSet
 from django.contrib import admin
 from . import views
+from rest_framework.generics import ListCreateAPIView
+
 router = DefaultRouter()
 router.register(r'reviews', ReviewViewSet, basename='review')
 router.register(r'wrestlers', WrestlerViewSet, basename='wrestler')
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('admin/', admin.site.urls),
-    path("", views.WrestlerList.as_view()),
 ]

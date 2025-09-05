@@ -13,5 +13,8 @@ urlpatterns = [
     path('', WrestlerListCreateView.as_view(), name='wrestler-list-create'),
     path('<int:pk>/', WrestlerDetailView.as_view(), name='wrestler-detail'),
     path('', include(router.urls)),
-     path("", views.WrestlerList.as_view()),
 ]
+
+router = DefaultRouter()
+router.register(r'', WrestlerViewSet, basename='wrestler')
+urlpatterns = router.urls

@@ -6,6 +6,11 @@ from .serializers import EventSerializer
 from rest_framework import viewsets
 from wrestlers.models import Wrestler
 from wrestlers.serializers import WrestlerSerializer
+from rest_framework.generics import ListCreateAPIView
+
+class EventList(ListCreateAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
 
 class EventViewSet(viewsets.ModelViewSet):
     """

@@ -35,8 +35,8 @@ def home(request):
 
 
 urlpatterns = [
-     path("admin/", admin.site.urls),
-     path("api/", include("wrestling_reviews.api_urls")),
+    path("admin/", admin.site.urls),
+    path("api/", include("wrestling_reviews.api_urls")),
     path("api/wrestlers/", include("wrestlers.urls")),
     path("api/events/", include("events.urls")),
     path("api/reviews/", include("reviews.urls")),
