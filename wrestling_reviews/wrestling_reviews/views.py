@@ -103,10 +103,16 @@ def review_detail(request, pk):
 
 def add_review(request):
     """Add a new review"""
+
+    events = Event.objects.all()
+    paginator = Paginator(events, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'reviews/list.html', {
+        'events': events,
         'page_obj': page_obj,
-        'search_query': search_query,
-    }
-    return render(request, 'reviews/list.html', context)
+    })
 
 def review_detail(request, pk):
     review = get_object_or_404(Review.objects.select_related('event', 'user').prefetch_related('wrestlers'), pk=pk)
