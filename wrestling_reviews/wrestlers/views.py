@@ -1,14 +1,11 @@
-from django.shortcuts import render
 from rest_framework import generics, permissions
 from .models import Wrestler
 from .serializers import WrestlerSerializer
 from rest_framework import filters
 from rest_framework import viewsets
-from .models import Wrestler
-from .serializers import WrestlerSerializer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
 
 class WrestlerUpdateView(APIView):
@@ -33,7 +30,7 @@ class WrestlerUpdateView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
-    
+
     def delete(self, request, *args, **kwargs):
         wrestler = get_object_or_404(Wrestler, pk=kwargs['pk'])
         wrestler.delete()

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'base.html' %}
 
 {% block title %}Events - Wrestling Reviews{% endblock %}
@@ -91,3 +92,17 @@
     {% endfor %}
 </div>
 {% endblock %}
+=======
+@@ .. @@
+         <div class="d-flex justify-content-between align-items-center mb-4">
+             <h2>Wrestling Events</h2>
+-            <a href="{% url 'add_event' %}" class="btn btn-primary">
+-                <i class="fas fa-plus me-2"></i>Add Event
+-            </a>
++            {% if user.is_superuser %}
++                <a href="{% url 'add_event' %}" class="btn btn-primary">
++                    <i class="fas fa-plus me-2"></i>Add Event
++                </a>
++            {% endif %}
+         </div>
+>>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867

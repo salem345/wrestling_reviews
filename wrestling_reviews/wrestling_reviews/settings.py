@@ -81,8 +81,13 @@ WSGI_APPLICATION = 'wrestling_reviews.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME':'salem2026$default',
+        'USERNAME':'salem2026',
+        'PASSWORD':'ٍ772004ش#',
+        'PORT':'3306',
+        'HOST':'salem2026.mysql.pythonanywhere-services.com',
+
     }
 }
 

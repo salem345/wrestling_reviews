@@ -20,7 +20,12 @@ from rest_framework.routers import DefaultRouter
 from reviews.views import ReviewViewSet, WrestlerViewSet
 from events.views import EventViewSet
 from users.views import UserViewSet
+<<<<<<< HEAD
 from . import views
+=======
+from django.http import HttpResponse
+from django.contrib.auth import views as auth_views
+>>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
 
 router = DefaultRouter()
 router.register(r'wrestlers', WrestlerViewSet, basename='wrestler')
@@ -59,4 +64,35 @@ urlpatterns = [
     path("api/events/", include("events.urls")),
     path("api/reviews/", include("reviews.urls")),
     path("api/users/", include("users.urls")),
+<<<<<<< HEAD
+=======
+    
+    # Authentication URLs
+    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    
+    # Main site URLs
+    path('', views.home, name='home'),
+    
+    # Reviews URLs
+    path('reviews/', views.reviews_list, name='reviews_list'),
+    path('reviews/<int:pk>/', views.review_detail, name='review_detail'),
+    path('reviews/add/', views.add_review, name='add_review'),
+    path('reviews/<int:pk>/edit/', views.edit_review, name='edit_review'),
+    path('reviews/<int:pk>/delete/', views.delete_review, name='delete_review'),
+    
+    # Wrestlers URLs
+    path('wrestlers/', views.wrestlers_list, name='wrestlers_list'),
+    path('wrestlers/<int:pk>/', views.wrestler_detail, name='wrestler_detail'),
+    path('wrestlers/add/', views.add_wrestler, name='add_wrestler'),
+    path('wrestlers/<int:pk>/edit/', views.edit_wrestler, name='edit_wrestler'),
+    path('wrestlers/<int:pk>/delete/', views.delete_wrestler, name='delete_wrestler'),
+    
+    # Events URLs
+    path('events/', views.events_list, name='events_list'),
+    path('events/<int:pk>/', views.event_detail, name='event_detail'),
+    path('events/add/', views.add_event, name='add_event'),
+    path('events/<int:pk>/edit/', views.edit_event, name='edit_event'),
+    path('events/<int:pk>/delete/', views.delete_event, name='delete_event'),
+>>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
 ]

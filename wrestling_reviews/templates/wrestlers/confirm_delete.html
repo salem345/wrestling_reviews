@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Wrestler - Wrestling Reviews{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Delete Wrestler
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-warning me-2"></i>
+                        <strong>Warning!</strong> This action cannot be undone.
+                    </div>
+                    
+                    <p class="lead">Are you sure you want to delete this wrestler?</p>
+                    
+                    <div class="wrestler-info bg-light p-3 rounded mb-4">
+                        <h5 class="text-danger">{{ wrestler.name }}</h5>
+                        <p class="mb-1">
+                            <i class="fas fa-flag me-2"></i>
+                            {{ wrestler.country }}
+                        </p>
+                        <p class="mb-1">
+                            <i class="fas fa-calendar me-2"></i>
+                            Debut: {{ wrestler.debut_year }}
+                        </p>
+                        {% if wrestler.reviews.count > 0 %}
+                        <p class="mb-0 text-warning">
+                            <i class="fas fa-star me-2"></i>
+                            This wrestler appears in {{ wrestler.reviews.count }} review{{ wrestler.reviews.count|pluralize }}.
+                        </p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-flex gap-3">
+                        <form method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-2"></i>
+                                Yes, Delete Wrestler
+                            </button>
+                        </form>
+                        <a href="{% url 'wrestler_detail' wrestler.pk %}" class="btn btn-secondary">
+                            <i class="fas fa-times me-2"></i>
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

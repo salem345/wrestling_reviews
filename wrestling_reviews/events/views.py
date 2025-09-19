@@ -3,7 +3,6 @@ from rest_framework import viewsets, permissions
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Event
 from .serializers import EventSerializer
-from rest_framework import viewsets
 from wrestlers.models import Wrestler
 from wrestlers.serializers import WrestlerSerializer
 from rest_framework.generics import ListCreateAPIView
@@ -16,10 +15,10 @@ class EventViewSet(viewsets.ModelViewSet):
     """
     CRUD كامل للأحداث:
     - GET /api/events/        -> list
-    - POST /api/events/       -> create (مستخدم مسجّل فقط)
+    - POST /api/events/       -> create
     - GET /api/events/<id>/   -> retrieve
-    - PUT/PATCH /api/events/<id>/ -> update (مستخدم مسجّل فقط)
-    - DELETE /api/events/<id>/    -> destroy (مستخدم مسجّل فقط)
+    - PUT/PATCH /api/events/<id>/ -> update
+    - DELETE /api/events/<id>/    -> destroy
 
     البحث/الترتيب/الفلاتر متاحة عبر DRF:
     - ?search=mania

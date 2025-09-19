@@ -1,9 +1,7 @@
 from rest_framework.routers import DefaultRouter
 from .views import EventViewSet
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
 from .views import WrestlerViewSet
-from . import views
 from .views import EventList
 
 router = DefaultRouter()
