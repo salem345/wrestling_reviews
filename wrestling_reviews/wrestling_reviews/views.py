@@ -273,7 +273,7 @@ def edit_wrestler(request, pk):
     context = {'form': form, 'title': 'Add Wrestler'}
     return render(request, 'wrestlers/form.html', context)
 
-+@user_passes_test(is_superuser)
+@user_passes_test(is_superuser)
 def edit_wrestler(request, pk):
     wrestler = get_object_or_404(Wrestler, pk=pk)
 
