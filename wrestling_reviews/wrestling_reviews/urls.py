@@ -61,8 +61,6 @@ urlpatterns = [
     path("api/events/", include("events.urls")),
     path("api/reviews/", include("reviews.urls")),
     path("api/users/", include("users.urls")),
-<<<<<<< HEAD
-=======
 
     # Authentication URLs
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
@@ -91,5 +89,4 @@ urlpatterns = [
     path('events/add/', views.add_event, name='add_event'),
     path('events/<int:pk>/edit/', views.edit_event, name='edit_event'),
     path('events/<int:pk>/delete/', views.delete_event, name='delete_event'),
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
 ]
