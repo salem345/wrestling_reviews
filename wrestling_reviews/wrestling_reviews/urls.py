@@ -21,7 +21,6 @@ from reviews.views import ReviewViewSet, WrestlerViewSet
 from events.views import EventViewSet
 from users.views import UserViewSet
 from . import views
-from django.http import HttpResponse
 from django.contrib.auth import views as auth_views
 
 router = DefaultRouter()

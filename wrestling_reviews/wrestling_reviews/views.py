@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -19,14 +18,12 @@ def home(request):
     total_wrestlers = Wrestler.objects.count()
     total_events = Event.objects.count()
     top_wrestlers = Wrestler.objects.annotate(review_count=Count('reviews')).order_by('-review_count')[:5]
-=======
-@@ .. @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
-+from django.contrib.auth.decorators import login_required, user_passes_test
-+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.admin.views.decorators import staff_member_required
 from reviews.models import Review
 from reviews.forms import ReviewForm
 from wrestlers.models import Wrestler
@@ -35,25 +32,24 @@ from events.models import Event
 from events.forms import EventForm
 from users.models import User
 
-+def is_superuser(user):
-+    return user.is_superuser
-+
-+def is_staff_or_superuser(user):
-+    return user.is_staff or user.is_superuser
+def is_superuser(user):
+    return user.is_superuser
+
+def is_staff_or_superuser(user):
+    return user.is_staff or user.is_superuser
 
 def home(request):
     # Get latest reviews
     latest_reviews = Review.objects.select_related('event', 'user').prefetch_related('wrestlers').order_by('-created_at')[:6]
-    
+
     # Get some stats
     total_reviews = Review.objects.count()
     total_wrestlers = Wrestler.objects.count()
     total_events = Event.objects.count()
-    
+
     # Get top wrestlers (most reviewed)
     top_wrestlers = Wrestler.objects.prefetch_related('reviews').all()[:5]
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
-    
+
     context = {
         'latest_reviews': latest_reviews,
         'total_reviews': total_reviews,
@@ -63,15 +59,12 @@ def home(request):
     }
     return render(request, 'home.html', context)
 
-<<<<<<< HEAD
 
 def reviews_list(request):
     """List all reviews with search and filtering"""
-=======
 def reviews_list(request):
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
     reviews = Review.objects.select_related('event', 'user').prefetch_related('wrestlers').order_by('-created_at')
-    
+
     # Search functionality
     search_query = request.GET.get('search')
     if search_query:
@@ -81,24 +74,20 @@ def reviews_list(request):
             Q(event__name__icontains=search_query) |
             Q(wrestlers__name__icontains=search_query)
         ).distinct()
-    
-<<<<<<< HEAD
+
     # Rating filter
     rating_filter = request.GET.get('rating')
     if rating_filter:
         reviews = reviews.filter(rating__gte=rating_filter)
-    
+
     # Pagination
     paginator = Paginator(reviews, 12)
-=======
     # Pagination
     paginator = Paginator(reviews, 10)
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
+
     context = {
-<<<<<<< HEAD
         'reviews': page_obj,
         'is_paginated': page_obj.has_other_pages(),
         'page_obj': page_obj,
@@ -114,7 +103,6 @@ def review_detail(request, pk):
 
 def add_review(request):
     """Add a new review"""
-=======
         'page_obj': page_obj,
         'search_query': search_query,
     }
@@ -126,18 +114,16 @@ def review_detail(request, pk):
     return render(request, 'reviews/detail.html', context)
 
 def add_review(request):
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
-<<<<<<< HEAD
+
             # For now, we'll use the first user. In a real app, you'd use request.user
             review.user = User.objects.first()
             review.save()
             form.save_m2m()
-=======
-            
+
             # Assign user - create default admin if no users exist
             if not User.objects.exists():
                 user = User.objects.create_user(
@@ -149,31 +135,30 @@ def add_review(request):
                 )
             else:
                 user = User.objects.first()
-            
+
             review.user = user
             review.save()
             form.save_m2m()  # Save many-to-many relationships
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
+
             messages.success(request, 'Review added successfully!')
             return redirect('review_detail', pk=review.pk)
     else:
         form = ReviewForm()
-    
-<<<<<<< HEAD
+
     return render(request, 'reviews/form.html', {'form': form})
 
 
 def edit_review(request, pk):
     """Edit an existing review"""
     review = get_object_or_404(Review, pk=pk)
-    
-=======
+
+
     context = {'form': form, 'title': 'Add Review'}
     return render(request, 'reviews/form.html', context)
 
 def edit_review(request, pk):
     review = get_object_or_404(Review, pk=pk)
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
+
     if request.method == 'POST':
         form = ReviewForm(request.POST, instance=review)
         if form.is_valid():
@@ -182,49 +167,48 @@ def edit_review(request, pk):
             return redirect('review_detail', pk=review.pk)
     else:
         form = ReviewForm(instance=review)
-    
-<<<<<<< HEAD
+
+
     return render(request, 'reviews/form.html', {'form': form})
 
 
 def delete_review(request, pk):
     """Delete a review"""
     review = get_object_or_404(Review, pk=pk)
-    
-=======
+
     context = {'form': form, 'title': 'Edit Review', 'review': review}
     return render(request, 'reviews/form.html', context)
 
 def delete_review(request, pk):
     review = get_object_or_404(Review, pk=pk)
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
+
     if request.method == 'POST':
         review.delete()
         messages.success(request, 'Review deleted successfully!')
         return redirect('reviews_list')
-    
-<<<<<<< HEAD
+
+
     return redirect('review_detail', pk=pk)
 
 
 def wrestlers_list(request):
     """List all wrestlers"""
     wrestlers = Wrestler.objects.annotate(review_count=Count('reviews')).order_by('name')
-=======
+
     context = {'review': review}
     return render(request, 'reviews/confirm_delete.html', context)
 
 # Wrestlers Views
 def wrestlers_list(request):
     wrestlers = Wrestler.objects.all().order_by('name')
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
-    
+
+
     # Search functionality
     search_query = request.GET.get('search')
     if search_query:
         wrestlers = wrestlers.filter(name__icontains=search_query)
-    
-<<<<<<< HEAD
+
+
     return render(request, 'wrestlers/list.html', {'wrestlers': wrestlers})
 
 
@@ -237,12 +221,12 @@ def wrestler_detail(request, pk):
 
 def add_wrestler(request):
     """Add a new wrestler"""
-=======
+
     # Pagination
     paginator = Paginator(wrestlers, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
+
     context = {
         'page_obj': page_obj,
         'search_query': search_query,
@@ -252,7 +236,7 @@ def add_wrestler(request):
 def wrestler_detail(request, pk):
     wrestler = get_object_or_404(Wrestler.objects.prefetch_related('reviews__event'), pk=pk)
     reviews = wrestler.reviews.all().order_by('-created_at')
-    
+
     context = {
         'wrestler': wrestler,
         'reviews': reviews,
@@ -261,7 +245,7 @@ def wrestler_detail(request, pk):
 
 +@user_passes_test(is_superuser)
 def add_wrestler(request):
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
+
     if request.method == 'POST':
         form = WrestlerForm(request.POST)
         if form.is_valid():
@@ -270,23 +254,23 @@ def add_wrestler(request):
             return redirect('wrestler_detail', pk=wrestler.pk)
     else:
         form = WrestlerForm()
-    
-<<<<<<< HEAD
+
+
     return render(request, 'wrestlers/form.html', {'form': form})
 
 
 def edit_wrestler(request, pk):
     """Edit an existing wrestler"""
     wrestler = get_object_or_404(Wrestler, pk=pk)
-    
-=======
+
+
     context = {'form': form, 'title': 'Add Wrestler'}
     return render(request, 'wrestlers/form.html', context)
 
 +@user_passes_test(is_superuser)
 def edit_wrestler(request, pk):
     wrestler = get_object_or_404(Wrestler, pk=pk)
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
+
     if request.method == 'POST':
         form = WrestlerForm(request.POST, instance=wrestler)
         if form.is_valid():
@@ -295,15 +279,15 @@ def edit_wrestler(request, pk):
             return redirect('wrestler_detail', pk=wrestler.pk)
     else:
         form = WrestlerForm(instance=wrestler)
-    
-<<<<<<< HEAD
+
+
     return render(request, 'wrestlers/form.html', {'form': form})
 
 
 def events_list(request):
     """List all events"""
     events = Event.objects.annotate(review_count=Count('reviews')).order_by('-date')
-=======
+
     context = {'form': form, 'title': 'Edit Wrestler', 'wrestler': wrestler}
     return render(request, 'wrestlers/form.html', context)
 
@@ -314,15 +298,15 @@ def events_list(request):
 +        wrestler.delete()
 +        messages.success(request, 'Wrestler deleted successfully!')
 +        return redirect('wrestlers_list')
-+    
++
 +    context = {'wrestler': wrestler}
 +    return render(request, 'wrestlers/confirm_delete.html', context)
 
 # Events Views
 def events_list(request):
     events = Event.objects.all().order_by('-date')
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
-    
+
+
     # Search functionality
     search_query = request.GET.get('search')
     if search_query:
@@ -331,16 +315,16 @@ def events_list(request):
             Q(location__icontains=search_query) |
             Q(promotion__icontains=search_query)
         )
-    
-<<<<<<< HEAD
+
+
     # Promotion filter
     promotion_filter = request.GET.get('promotion')
     if promotion_filter:
         events = events.filter(promotion=promotion_filter)
-    
+
     # Get unique promotions for filter dropdown
     promotions = Event.objects.values_list('promotion', flat=True).distinct().exclude(promotion='')
-    
+
     context = {
         'events': events,
         'promotions': promotions,
@@ -357,12 +341,12 @@ def event_detail(request, pk):
 
 def add_event(request):
     """Add a new event"""
-=======
+
     # Pagination
     paginator = Paginator(events, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
+
     context = {
         'page_obj': page_obj,
         'search_query': search_query,
@@ -372,7 +356,7 @@ def add_event(request):
 def event_detail(request, pk):
     event = get_object_or_404(Event.objects.prefetch_related('reviews__wrestlers', 'reviews__user'), pk=pk)
     reviews = event.reviews.all().order_by('-created_at')
-    
+
     context = {
         'event': event,
         'reviews': reviews,
@@ -381,7 +365,7 @@ def event_detail(request, pk):
 
 +@user_passes_test(is_superuser)
 def add_event(request):
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
+
     if request.method == 'POST':
         form = EventForm(request.POST)
         if form.is_valid():
@@ -390,23 +374,23 @@ def add_event(request):
             return redirect('event_detail', pk=event.pk)
     else:
         form = EventForm()
-    
-<<<<<<< HEAD
+
+
     return render(request, 'events/form.html', {'form': form})
 
 
 def edit_event(request, pk):
     """Edit an existing event"""
     event = get_object_or_404(Event, pk=pk)
-    
-=======
+
+
     context = {'form': form, 'title': 'Add Event'}
     return render(request, 'events/form.html', context)
 
 +@user_passes_test(is_superuser)
 def edit_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
+
     if request.method == 'POST':
         form = EventForm(request.POST, instance=event)
         if form.is_valid():
@@ -415,10 +399,10 @@ def edit_event(request, pk):
             return redirect('event_detail', pk=event.pk)
     else:
         form = EventForm(instance=event)
-    
-<<<<<<< HEAD
+
+
     return render(request, 'events/form.html', {'form': form})
-=======
+
     context = {'form': form, 'title': 'Edit Event', 'event': event}
     return render(request, 'events/form.html', context)
 
@@ -429,7 +413,6 @@ def edit_event(request, pk):
 +        event.delete()
 +        messages.success(request, 'Event deleted successfully!')
 +        return redirect('events_list')
-+    
++
 +    context = {'event': event}
 +    return render(request, 'events/confirm_delete.html', context)
->>>>>>> da6c827a78fb05f16b8d24fe94fb6220614cb867
