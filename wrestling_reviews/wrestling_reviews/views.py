@@ -249,7 +249,7 @@ def wrestler_detail(request, pk):
     }
     return render(request, 'wrestlers/detail.html', context)
 
-+@user_passes_test(is_superuser)
+@user_passes_test(is_superuser)
 def add_wrestler(request):
 
     if request.method == 'POST':
@@ -297,16 +297,16 @@ def events_list(request):
     context = {'form': form, 'title': 'Edit Wrestler', 'wrestler': wrestler}
     return render(request, 'wrestlers/form.html', context)
 
-+@user_passes_test(is_superuser)
-+def delete_wrestler(request, pk):
-+    wrestler = get_object_or_404(Wrestler, pk=pk)
-+    if request.method == 'POST':
-+        wrestler.delete()
-+        messages.success(request, 'Wrestler deleted successfully!')
-+        return redirect('wrestlers_list')
-+
-+    context = {'wrestler': wrestler}
-+    return render(request, 'wrestlers/confirm_delete.html', context)
+@user_passes_test(is_superuser)
+def delete_wrestler(request, pk):
+    wrestler = get_object_or_404(Wrestler, pk=pk)
+    if request.method == 'POST':
+        wrestler.delete()
+        messages.success(request, 'Wrestler deleted successfully!')
+        return redirect('wrestlers_list')
+
+    context = {'wrestler': wrestler}
+    return render(request, 'wrestlers/confirm_delete.html', context)
 
 # Events Views
 def events_list(request):
@@ -369,7 +369,7 @@ def event_detail(request, pk):
     }
     return render(request, 'events/detail.html', context)
 
-+@user_passes_test(is_superuser)
+@user_passes_test(is_superuser)
 def add_event(request):
 
     if request.method == 'POST':
@@ -393,7 +393,7 @@ def edit_event(request, pk):
     context = {'form': form, 'title': 'Add Event'}
     return render(request, 'events/form.html', context)
 
-+@user_passes_test(is_superuser)
+@user_passes_test(is_superuser)
 def edit_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
 
@@ -412,13 +412,13 @@ def edit_event(request, pk):
     context = {'form': form, 'title': 'Edit Event', 'event': event}
     return render(request, 'events/form.html', context)
 
-+@user_passes_test(is_superuser)
-+def delete_event(request, pk):
-+    event = get_object_or_404(Event, pk=pk)
-+    if request.method == 'POST':
-+        event.delete()
-+        messages.success(request, 'Event deleted successfully!')
-+        return redirect('events_list')
-+
-+    context = {'event': event}
-+    return render(request, 'events/confirm_delete.html', context)
+@user_passes_test(is_superuser)
+def delete_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    if request.method == 'POST':
+        event.delete()
+        messages.success(request, 'Event deleted successfully!')
+        return redirect('events_list')
+
+    context = {'event': event}
+    return render(request, 'events/confirm_delete.html', context)
